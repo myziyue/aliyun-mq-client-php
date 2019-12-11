@@ -6,11 +6,12 @@
 include_once "config.php";
 
 try {
-    $mqProducer = new \MyZiyue\MQProducer();
+    $mqProducer = new \MyZiyue\MQOrderProducer();
     $mqProducer->setGroupId($groupId);
     $mqProducer->setNameSrvAddr($nameSrvAddr);
     $mqProducer->setTopic($topics);
     $mqProducer->auth($accessKey, $secretKey);
+    $mqProducer->setShardingKey("test-abc");
     $mqProducer->start();
     // 顺序分布
 //    var_dump($mqProducer->send("This is a demo", "test", "key"));

@@ -2,15 +2,14 @@
 // Created by MyZiyue on 2019/10/25.
 //
 
-#ifndef ROCKETMQ_ONCE_CLIENT_PHP_PRODUCER_H
-#define ROCKETMQ_ONCE_CLIENT_PHP_PRODUCER_H
+#ifndef ROCKETMQ_ONCE_CLIENT_PHP_ORDER_PRODUCER_H
+#define ROCKETMQ_ONCE_CLIENT_PHP_ORDER_PRODUCER_H
 
 #include "common.h"
 
-class MQProducer : public Php::Base {
+class MQOrderProducer : public Php::Base {
 private:
     ons::ONSFactoryProperty factoryInfo;
-    ons::Producer *pProducer = nullptr;
     ons::OrderProducer *pOrderProducer = nullptr;
     std::string messageKey = "";
     std::string messageTag = "";
@@ -26,9 +25,9 @@ private:
         return timestamp;
     }
 public:
-    MQProducer() {}
+    MQOrderProducer() {}
 
-    virtual ~MQProducer() {}
+    virtual ~MQOrderProducer() {}
 
     void __construct() {}
 
@@ -79,13 +78,13 @@ public:
     Php::Value getInstanceId();
 
     void __destruct() {
-        if (this->pProducer != nullptr) {
-            this->pProducer->shutdown();
-            delete (this->pProducer);
+        if (this->pOrderProducer != nullptr) {
+            this->pOrderProducer->shutdown();
+            delete (this->pOrderProducer);
         }
     }
 };
 
-void registerMQProducer(Php::Namespace &rocketMQNamespace);
+void registerMQOrderProducer(Php::Namespace &rocketMQNamespace);
 
-#endif //ROCKETMQ_ONCE_CLIENT_PHP_PRODUCER_H
+#endif //ROCKETMQ_ONCE_CLIENT_PHP_ORDER_PRODUCER_H

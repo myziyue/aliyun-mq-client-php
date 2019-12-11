@@ -17,10 +17,12 @@
 #include "ONSClientException.h"
 
 #include "producer.h"
-//#include "mq-exception.h"
+#include "consumer.h"
+#include "order-producer.h"
+#include "order-consumer.h"
 
 #define NAMESPACE_NAME "MyZiyue"
-#define DEFAULT_TAG_NAME "MyZiyueTag"
+#define DEFAULT_TAG_NAME "DefaultTag"
 #define DEFAULT_WAIT_TIME 60; // 单位：秒
 
 using namespace ons;

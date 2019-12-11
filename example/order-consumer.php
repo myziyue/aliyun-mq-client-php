@@ -2,7 +2,7 @@
 include_once "config.php";
 
 try{
-    $mqConsumer = new \MyZiyue\MQConsumer();
+    $mqConsumer = new \MyZiyue\MQOrderConsumer();
     $mqConsumer->setConsumerId($groupId);
     $mqConsumer->setNameSrvAddr($nameSrvAddr);
     $mqConsumer->setTopic($topics);

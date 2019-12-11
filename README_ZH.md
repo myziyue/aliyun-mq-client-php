@@ -1,7 +1,7 @@
 # aliyunmq-client-php
 ----------
-[English](README.md)
-----------
+[中文文档] | [[English]](README.md)
+
 
 阿里云ONS MQ的PHP扩展客户端。
 
@@ -41,3 +41,10 @@
 # 示例
 
 查看example文件夹
+
+# todo
+- [x] 普通消息发送
+- [x] 顺序消息发送
+- [x] 定时消息发送
+- [ ] 事物消息发送
+- [x] 消息接收

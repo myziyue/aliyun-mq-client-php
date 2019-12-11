@@ -7,6 +7,7 @@
 Php::Value MQProducer::getGroupId() {
     return this->factoryInfo.getGroupId();
 }
+
 void MQProducer::setGroupId(Php::Parameters &param) {
     std::string groupId = param[0];
     this->factoryInfo.setFactoryProperty(ONSFactoryProperty::ProducerId, groupId.data());
@@ -15,6 +16,7 @@ void MQProducer::setGroupId(Php::Parameters &param) {
 Php::Value MQProducer::getNameSrvAddr() {
     return this->factoryInfo.getNameSrvAddr();
 }
+
 void MQProducer::setNameSrvAddr(Php::Parameters &param) {
     std::string nameSrvAddr = param[0];
     this->factoryInfo.setFactoryProperty(ONSFactoryProperty::NAMESRV_ADDR, nameSrvAddr.data());
@@ -23,9 +25,40 @@ void MQProducer::setNameSrvAddr(Php::Parameters &param) {
 Php::Value MQProducer::getTopic() {
     return this->factoryInfo.getPublishTopics();
 }
+
 void MQProducer::setTopic(Php::Parameters &param) {
     std::string topic = param[0];
     this->factoryInfo.setFactoryProperty(ONSFactoryProperty::PublishTopics, topic.data());
+}
+
+// messageKey
+Php::Value MQProducer::getMessageKey() {
+    return this->messageKey;
+}
+
+void MQProducer::setMessageKey(Php::Parameters &param) {
+    std::string messageKey = param[0];
+    this->messageKey = messageKey;
+}
+
+// messageTag
+Php::Value MQProducer::getMessageTag() {
+    return this->messageTag;
+}
+
+void MQProducer::setMessageTag(Php::Parameters &param) {
+    std::string messageTag = param[0];
+    this->messageTag = messageTag;
+}
+
+// deliverTime
+void MQProducer::setDeliverTime(Php::Parameters &param) {
+    long deliverTime = param[0];
+    if (deliverTime > 0) {
+        this->deliverTime = getTimeStamp() + deliverTime * 1000;
+    } else {
+        this->deliverTime = 0;
+    }
 }
 
 void MQProducer::auth(Php::Parameters &param) {
@@ -40,7 +73,7 @@ void MQProducer::start() {
         try {
             this->pProducer = ONSFactory::getInstance()->createProducer(this->factoryInfo);
             this->pProducer->start();
-        } catch(std::exception& exception) {
+        } catch (std::exception &exception) {
             Php::out << "exception caught: " << exception.what() << std::endl;
             throw Php::Exception(exception.what());
         }
@@ -50,33 +83,24 @@ void MQProducer::start() {
 Php::Value MQProducer::send(Php::Parameters &param) {
     // message
     std::string message = param[0];
-    // message tag
-    std::string messageTag = DEFAULT_TAG_NAME;
-    if (param.size() >= 2) {
-        std::string tag = param[1];
-        if (tag != "") {
-            messageTag = tag;
-        }
-    }
-    // message key
-    if (param.size() == 3) {
-        std::string key = param[2];
-        if (key != "") {
-            this->messageKey = key;
-        }
-    }
-
 
     // start send message
     SendResultONS sendResultOns;
     try {
-        std::string msgKey = this->getMessageKey();
         Message msg(
                 this->factoryInfo.getPublishTopics(),
-                messageTag.data(),
-                msgKey.data(),
+                DEFAULT_TAG_NAME,
                 message.data()
         );
+        if (this->getMessageKey()) {
+            msg.setKey(this->getMessageKey());
+        }
+        if (this->getMessageTag()) {
+            msg.setTag(this->getMessageTag());
+        }
+        if (this->deliverTime) {
+            msg.setStartDeliverTime((float)this->deliverTime);
+        }
         sendResultOns = this->pProducer->send(msg);
     } catch (ONSClientException &exception) {
         this->messageKey = nullptr;
@@ -89,31 +113,22 @@ Php::Value MQProducer::send(Php::Parameters &param) {
 Php::Value MQProducer::sendOneWay(Php::Parameters &param) {
     // message
     std::string message = param[0];
-    // message tag
-    std::string messageTag = DEFAULT_TAG_NAME;
-    if (param.size() == 2) {
-        std::string tag = param[1];
-        if (tag != "") {
-            messageTag = tag;
-        }
-    }
-    // message key
-    if (param.size() == 3) {
-        std::string key = param[2];
-        if (key != "") {
-            this->messageKey = key;
-        }
-    }
-
     // start send message
     try {
-        std::string msgKey = this->getMessageKey();
         Message msg(
                 this->factoryInfo.getPublishTopics(),
-                messageTag.data(),
-                msgKey.data(),
+                DEFAULT_TAG_NAME,
                 message.data()
         );
+        if (this->getMessageKey()) {
+            msg.setKey(this->getMessageKey());
+        }
+        if (this->getMessageTag()) {
+            msg.setTag(this->getMessageTag());
+        }
+        if (this->deliverTime) {
+            msg.setStartDeliverTime((float)this->deliverTime);
+        }
         this->pProducer->sendOneway(msg);
     } catch (ONSClientException &exception) {
         this->messageKey = nullptr;
@@ -128,14 +143,6 @@ void MQProducer::close() {
         this->pProducer->shutdown();
         this->pProducer = nullptr;
     }
-}
-
-Php::Value MQProducer::getLogPath(){
-    return this->factoryInfo.getLogPath();
-}
-
-Php::Value MQProducer::getInstanceId(){
-    return this->factoryInfo.getInstanceId();
 }
 
 void registerMQProducer(Php::Namespace &rocketMQNamespace) {
@@ -157,6 +164,15 @@ void registerMQProducer(Php::Namespace &rocketMQNamespace) {
     mqProducerClass.method<&MQProducer::getTopic>("getTopic");
     mqProducerClass.method<&MQProducer::setTopic>("setTopic", {Php::ByVal("topic", Php::Type::String),});
 
+    mqProducerClass.method<&MQProducer::getMessageKey>("getMessageKey");
+    mqProducerClass.method<&MQProducer::setMessageKey>("setMessageKey", {Php::ByVal("messageKey", Php::Type::String),});
+
+
+    mqProducerClass.method<&MQProducer::getMessageTag>("getMessageTag");
+    mqProducerClass.method<&MQProducer::setMessageTag>("setMessageTag", {Php::ByVal("messageTag", Php::Type::String),});
+
+    mqProducerClass.method<&MQProducer::setDeliverTime>("setDeliverTime", {Php::ByVal("deliverTime", Php::Type::Float),});
+
     mqProducerClass.method<&MQProducer::auth>("auth", {
             Php::ByVal("accessKey", Php::Type::String),
             Php::ByVal("secretKey", Php::Type::String),
@@ -166,17 +182,10 @@ void registerMQProducer(Php::Namespace &rocketMQNamespace) {
 
     mqProducerClass.method<&MQProducer::send>("send", {
             Php::ByVal("message", Php::Type::String),
-            Php::ByVal("msgTags", Php::Type::String, false),
-            Php::ByVal("msgKey", Php::Type::String, false),
     });
     mqProducerClass.method<&MQProducer::sendOneWay>("sendOneWay", {
             Php::ByVal("message", Php::Type::String),
-            Php::ByVal("msgTags", Php::Type::String, false),
-            Php::ByVal("msgKey", Php::Type::String, false),
     });
-
-    mqProducerClass.method<&MQProducer::getLogPath>("getLogPath");
-    mqProducerClass.method<&MQProducer::getInstanceId>("getInstanceId");
 
     mqProducerClass.method<&MQProducer::close>("close");
 

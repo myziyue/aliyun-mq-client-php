@@ -1,6 +1,6 @@
 <?php
 namespace MyZiyue;
 
-class MQMessageListener
+class MQOrderMessageListener
 {
 }

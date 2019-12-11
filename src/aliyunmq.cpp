@@ -2,7 +2,6 @@
 // Created by MyZiyue on 2019/10/25.
 //
 #include "common.h"
-#include "consumer.h"
 
 /**
  *  tell the compiler that the get_module is a pure C function
@@ -31,6 +30,8 @@ extern "C" {
         registerMQMessageListener(rocketMQNamespace);
         registerMQProducer(rocketMQNamespace);
         registerMQConsumer(rocketMQNamespace);
+        registerMQOrderProducer(rocketMQNamespace);
+        registerMQOrderConsumer(rocketMQNamespace);
 
         extension.add(std::move(rocketMQNamespace));
 

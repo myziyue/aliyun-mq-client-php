@@ -1,7 +1,7 @@
 # aliyunmq-client-php
 ----------
-[中文文档](README_ZH.md)
-----------
+[[中文文档]](README_ZH.md) | [English]
+
 
 A Php Client for Aliyun RocketMQ
 
@@ -37,3 +37,10 @@ to see autocompelete file.
 # Example
 
 to see example file.
+
+# todo
+- [x] 普通消息发送
+- [x] 顺序消息发送
+- [x] 定时消息发送
+- [ ] 事物消息发送
+- [x] 消息接收

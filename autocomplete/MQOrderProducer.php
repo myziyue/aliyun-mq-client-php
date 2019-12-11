@@ -2,7 +2,7 @@
 
 namespace MyZiyue;
 
-class MQProducer
+class MQOrderProducer
 {
     public function __construct()
     {
@@ -47,6 +47,12 @@ class MQProducer
     public function setMessageTag(string $messageTag):void
     {}
 
+    // shardingKey
+    public function getShardingKey():string
+    {}
+    public function setShardingKey(string $shardingKey):void
+    {}
+
     // deliverTime
     public function getDeliverTime():float
     {}
@@ -66,10 +72,6 @@ class MQProducer
     }
 
     public function send(string $message): string
-    {
-    }
-
-    public function sendOneway(string $message): string
     {
     }
 }

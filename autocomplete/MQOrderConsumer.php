@@ -2,7 +2,7 @@
 namespace MyZiyue;
 
 
-class MQConsumer
+class MQOrderConsumer
 {
     public function __construct()
     {
