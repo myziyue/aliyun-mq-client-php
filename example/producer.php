@@ -10,11 +10,12 @@ try {
     $mqProducer->setGroupId($groupId);
     $mqProducer->setNameSrvAddr($nameSrvAddr);
     $mqProducer->setTopic($topics);
+    $mqProducer->setMessageTag("test_tag");
+    $mqProducer->setMessageKey("S__MSG_php");
     $mqProducer->auth($accessKey, $secretKey);
     $mqProducer->start();
-    // 顺序分布
-//    var_dump($mqProducer->send("This is a demo", "test", "key"));
-    var_dump($mqProducer->send("This is a demo"));
+    $msgId = $mqProducer->send("This is a demo");
+    var_dump($msgId);
 } catch (Exception $ex) {
     echo $ex->getMessage();
 }
