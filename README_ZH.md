@@ -3,7 +3,7 @@
 [中文文档] | [[English]](README.md)
 
 
-阿里云ONS MQ的PHP扩展客户端。
+阿里云ONS MQ的PHP扩展客户端。注意：由于阿里云CPP版本SDK不支持协程态，所以此扩展在协程框架下暂不可用。
 
 # 依赖
 
