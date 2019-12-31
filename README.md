@@ -3,7 +3,7 @@
 [[中文文档]](README_ZH.md) | [English]
 
 
-A Php Client for Aliyun RocketMQ
+A Php Client for Aliyun RocketM. Note: because alicloud's CPP SDK does not support the Coroutine, this extension is temporarily unavailable under the Coroutine framework.
 
 # dependence
 
