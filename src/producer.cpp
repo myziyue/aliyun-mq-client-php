@@ -71,6 +71,8 @@ void MQProducer::auth(Php::Parameters &param) {
 void MQProducer::start() {
     if (this->pProducer == nullptr) {
         try {
+            this->factoryInfo.setFactoryProperty("LogPath", Php::ini_get("aliyunmq.log_path"));
+
             this->pProducer = ONSFactory::getInstance()->createProducer(this->factoryInfo);
             this->pProducer->start();
         } catch (std::exception &exception) {
@@ -86,6 +88,7 @@ Php::Value MQProducer::send(Php::Parameters &param) {
 
     // start send message
     SendResultONS sendResultOns;
+
     try {
         Message msg(
                 this->factoryInfo.getPublishTopics(),

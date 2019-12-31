@@ -86,6 +86,8 @@ void MQOrderProducer::start() {
     }
     if (this->pOrderProducer == nullptr) {
         try {
+            this->factoryInfo.setFactoryProperty("LogPath", Php::ini_get("aliyunmq.log_path"));
+
             this->pOrderProducer = ONSFactory::getInstance()->createOrderProducer(this->factoryInfo);
             this->pOrderProducer->start();
         } catch (std::exception &exception) {
@@ -133,14 +135,6 @@ void MQOrderProducer::close() {
         this->pOrderProducer->shutdown();
         this->pOrderProducer = nullptr;
     }
-}
-
-Php::Value MQOrderProducer::getLogPath() {
-    return this->factoryInfo.getLogPath();
-}
-
-Php::Value MQOrderProducer::getInstanceId() {
-    return this->factoryInfo.getInstanceId();
 }
 
 void registerMQOrderProducer(Php::Namespace &rocketMQNamespace) {

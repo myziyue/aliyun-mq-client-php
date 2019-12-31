@@ -61,6 +61,8 @@ void MQOrderConsumer::subscribe(Php::Parameters &param) {
     }
     if(this->cConsumer == nullptr) {
         try {
+            this->factoryInfo.setFactoryProperty("LogPath", Php::ini_get("aliyunmq.log_path"));
+
             this->cConsumer = ONSFactory::getInstance()->createOrderConsumer(this->factoryInfo);
             std::string topic(this->factoryInfo.getPublishTopics());
             std::string tag(tags.data());

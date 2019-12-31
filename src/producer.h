@@ -73,9 +73,6 @@ public:
     // close
     void close();
 
-    // logger
-    Php::Value getLogPath();
-
     Php::Value getInstanceId();
 
     void __destruct() {

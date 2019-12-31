@@ -72,11 +72,6 @@ public:
     // close
     void close();
 
-    // logger
-    Php::Value getLogPath();
-
-    Php::Value getInstanceId();
-
     void __destruct() {
         if (this->pOrderProducer != nullptr) {
             this->pOrderProducer->shutdown();

@@ -34,6 +34,7 @@ extern "C" {
         registerMQOrderConsumer(rocketMQNamespace);
 
         extension.add(std::move(rocketMQNamespace));
+        extension.add("aliyunmq.log_path", "/tmp/");
 
         // return the extension
         return extension;
