@@ -13,6 +13,10 @@ A Php Client for Aliyun RocketMQ.
 - [PHP-CPP](http://www.php-cpp.com/)
 - [PHP7.2+](https://www.php.net/)
 
+```
+In php7.1 environment, php-cpp 2.1.4 is recommended.
+```
+
 # INSTALL
 
 1. Install aliyun-mq-linux-cpp-sdk
