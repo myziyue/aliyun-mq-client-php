@@ -11,6 +11,10 @@
 - [PHP-CPP](http://www.php-cpp.com/)
 - [PHP7.2+](https://www.php.net/)
 
+```
+在PHP7.1环境下，建议使用`PHP-CPP 2.1.4`版本
+```
+
 # 安装
 
 1. 安装 aliyun-mq-linux-cpp-sdk
