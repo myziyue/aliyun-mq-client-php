@@ -19,7 +19,7 @@ extern "C" {
     {
         // static(!) Php::Extension object that should stay in memory
         // for the entire duration of the process (that's why it's static)
-        static Php::Extension extension("aliyunmq", "1.0");
+        static Php::Extension extension("aliyunmq", "1.1.0");
 
         // add your own functions, classes, namespaces to the extension
         // all class in RocketMQ namespace.
