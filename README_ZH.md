@@ -7,7 +7,7 @@
 
 # 依赖
 
-- [aliyun-mq-linux-cpp-sdk V2.0.0](https://ons-client-sdk.oss-cn-hangzhou.aliyuncs.com/linux_all_in_one/V2.0.0/aliyun-mq-linux-cpp-sdk.tar.gz?spm=a2c4g.11186623.2.16.717bd2cc5zhMdW&file=aliyun-mq-linux-cpp-sdk.tar.gz)
+- [aliyun-mq-linux-cpp-sdk V2.1.0](https://ons-client-sdk.oss-cn-hangzhou.aliyuncs.com/linux_all_in_one/2.1.0/rhel7u2/aliyun-mq-linux-cpp-sdk.tar.gz?spm=a2c4g.11186623.2.18.22323a04UlcEJo&file=aliyun-mq-linux-cpp-sdk.tar.gz)
 - [PHP-CPP](http://www.php-cpp.com/)
 - [PHP7.1+](https://www.php.net/)
 
@@ -20,12 +20,11 @@
 1. 安装 aliyun-mq-linux-cpp-sdk
 
 ```
-# wget "https://ons-client-sdk.oss-cn-hangzhou.aliyuncs.com/linux_all_in_one/V2.0.0/aliyun-mq-linux-cpp-sdk.tar.gz?spm=a2c4g.11186623.2.16.717bd2cc5zhMdW&file=aliyun-mq-linux-cpp-sdk.tar.gz" -O aliyun-mq-linux-cpp-sdk.tar.gz
+# wget "https://ons-client-sdk.oss-cn-hangzhou.aliyuncs.com/linux_all_in_one/2.1.0/rhel7u2/aliyun-mq-linux-cpp-sdk.tar.gz?spm=a2c4g.11186623.2.18.22323a04UlcEJo&file=aliyun-mq-linux-cpp-sdk.tar.gz" -O aliyun-mq-linux-cpp-sdk.tar.gz
 # tar zxvf aliyun-mq-linux-cpp-sdk.tar.gz
-# cd aliyun-mq-linux-cpp-sdk/RHEL_7.x/x86_64/
-# tar zxvf aliyun-mq-linux-cpp-sdk.tar.gz
-# cp -rf aliyun-mq-linux-cpp-sdk/include/* /usr/include/
-# cp -rf aliyun-mq-linux-cpp-sdk/lib/* /lib64/
+# cd aliyun-mq-linux-cpp-sdk/
+# cp -rf include/* /usr/include/
+# cp -rf lib/* /lib64/
 ```
 
 2. 安装 PHP-CPP

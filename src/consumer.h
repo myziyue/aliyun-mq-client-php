@@ -6,7 +6,7 @@
 #define ROCKETMQ_ONCE_CLIENT_PHP_CONSUMER_H
 
 #include "common.h"
-#include "MessageListener.h"
+#include "rocketmq/MessageListener.h"
 #include "message-listener.h"
 
 using namespace ons;
