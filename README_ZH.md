@@ -26,6 +26,12 @@
 
 2. 安装 PHP-CPP
 
+```
+# git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
+# cd PHP-CPP
+# make && make install
+```
+
 3. 安装 aliyunmq-client-php
 
 ```

@@ -27,6 +27,13 @@ A Php Client for Aliyun RocketMQ.
 ```
 
 2. Install PHP-CPP
+
+```
+# git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
+# cd PHP-CPP
+# make && make install
+```
+
 3. Install aliyunmq-client-php
 ```
 # sh build.sh
