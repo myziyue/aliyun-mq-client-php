@@ -20,8 +20,12 @@
 1. 安装 aliyun-mq-linux-cpp-sdk
 
 ```
-# cp -rf aliyun-mq-linux-cpp-sdk-centos7/include/* /usr/include/
-# cp -rf aliyun-mq-linux-cpp-sdk-centos7/lib/* /lib64/
+# wget "https://ons-client-sdk.oss-cn-hangzhou.aliyuncs.com/linux_all_in_one/V2.0.0/aliyun-mq-linux-cpp-sdk.tar.gz?spm=a2c4g.11186623.2.16.717bd2cc5zhMdW&file=aliyun-mq-linux-cpp-sdk.tar.gz" -O aliyun-mq-linux-cpp-sdk.tar.gz
+# tar zxvf aliyun-mq-linux-cpp-sdk.tar.gz
+# cd aliyun-mq-linux-cpp-sdk/RHEL_7.x/x86_64/
+# tar zxvf aliyun-mq-linux-cpp-sdk.tar.gz
+# cp -rf aliyun-mq-linux-cpp-sdk/include/* /usr/include/
+# cp -rf aliyun-mq-linux-cpp-sdk/lib/* /lib64/
 ```
 
 2. 安装 PHP-CPP
