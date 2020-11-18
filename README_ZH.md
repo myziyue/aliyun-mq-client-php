@@ -45,6 +45,7 @@
 
 ```
 # echo "extension=aliyunmq.so" >> $PHP_INSTALL_PATH/etc/php.ini
+# echo 'aliyunmq.log_path="/tmp/"' >> $PHP_INSTALL_PATH/etc/php.ini
 ```
 
 # 使用

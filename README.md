@@ -44,6 +44,7 @@ A Php Client for Aliyun RocketMQ.
 4. update php.ini file, add line extension=aliyunmq.so;
 ```
 # echo "extension=aliyunmq.so" >> $PHP_INSTALL_PATH/etc/php.ini
+# echo 'aliyunmq.log_path="/tmp/"' >> $PHP_INSTALL_PATH/etc/php.ini
 ```
 
 # Usage
