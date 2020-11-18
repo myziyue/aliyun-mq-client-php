@@ -58,8 +58,6 @@ Php::Value MQOrderProducer::getShardingKey() {
 
 void MQOrderProducer::setShardingKey(Php::Parameters &param) {
     std::string shardingKey = param[0];
-
-//    std::cout << "#" << shardingKey << "#" << std::endl;
     this->shardingKey = shardingKey;
 }
 
