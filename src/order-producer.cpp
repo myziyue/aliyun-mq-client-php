@@ -80,7 +80,7 @@ void MQOrderProducer::auth(Php::Parameters &param) {
 
 void MQOrderProducer::start() {
     if (this->shardingKey == "") {
-        Php::error << "ShardingKey is empty(0).") << std::flush;
+        Php::error << "ShardingKey is empty(0)." << std::flush;
     }
     if (this->pOrderProducer == nullptr) {
         try {
@@ -114,7 +114,7 @@ Php::Value MQOrderProducer::send(Php::Parameters &param) {
         msg.setStartDeliverTime((float)this->deliverTime);
     }
     if (this->shardingKey == "") {
-        Php::error << "ShardingKey is empty(1).") << std::flush;
+        Php::error << "ShardingKey is empty(1)." << std::flush;
     }
 
     // start send message
