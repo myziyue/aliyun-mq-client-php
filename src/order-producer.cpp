@@ -82,16 +82,13 @@ void MQOrderProducer::auth(Php::Parameters &param) {
 
 void MQOrderProducer::start() {
     if (this->shardingKey == "") {
-        throw Php::Exception("ShardingKey is empty(0).");
+        Php::error << "ShardingKey is empty(0).") << std::flush;
     }
     if (this->pOrderProducer == nullptr) {
         try {
             this->factoryInfo.setFactoryProperty(ONSFactoryProperty::LogPath, Php::ini_get("aliyunmq.log_path"));
 
             this->pOrderProducer = ONSFactory::getInstance()->createOrderProducer(this->factoryInfo);
-            if(this->pOrderProducer == nullptr) {
-                Php::error << "Initialization failed." << std::flush;
-            }
             this->pOrderProducer->start();
         } catch (Php::Exception &exception) {
             Php::error << "exception caught: " << exception.what() << std::flush;
@@ -119,7 +116,7 @@ Php::Value MQOrderProducer::send(Php::Parameters &param) {
         msg.setStartDeliverTime((float)this->deliverTime);
     }
     if (this->shardingKey == "") {
-        throw Php::Exception("ShardingKey is empty(1).");
+        Php::error << "ShardingKey is empty(1).") << std::flush;
     }
 
     // start send message
