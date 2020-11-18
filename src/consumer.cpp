@@ -41,7 +41,7 @@ void MQConsumer::auth(Php::Parameters &param) {
 void MQConsumer::registerCallback(Php::Parameters &param) {
     if (!param[0].isCallable())
         throw Php::Exception("Not a callable type.");
-    this->ONSFactoryProperty::LogPath = param[0];
+    this->callbackFunc = param[0];
 }
 
 void MQConsumer::subscribe(Php::Parameters &param) {
@@ -61,14 +61,14 @@ void MQConsumer::subscribe(Php::Parameters &param) {
     }
     if(this->cConsumer == nullptr) {
         try {
-            this->factoryInfo.setFactoryProperty("LogPath", Php::ini_get("aliyunmq.log_path"));
+            this->factoryInfo.setFactoryProperty(ONSFactoryProperty::LogPath, Php::ini_get("aliyunmq.log_path"));
 
             this->cConsumer = ONSFactory::getInstance()->createPushConsumer(this->factoryInfo);
             std::string topic(this->factoryInfo.getPublishTopics());
             std::string tag(tags.data());
 
             MQMessageListener *mqMessageListener = new MQMessageListener();
-            mqMessageListener->registerCallback(this->ONSFactoryProperty::LogPath);
+            mqMessageListener->registerCallback(this->callbackFunc);
             this->cConsumer->subscribe(topic.c_str(), tag.c_str(), mqMessageListener);
             this->cConsumer->start();
 
@@ -90,10 +90,10 @@ void registerMQConsumer(Php::Namespace &rocketMQNamespace) {
     Php::Class <MQConsumer> mqConsumerClass("MQConsumer");
 
     mqConsumerClass.constant("DEFAULT_TAG_NAME", DEFAULT_TAG_NAME);
-    
+
     mqConsumerClass.method<&MQConsumer::__construct>("__construct");
     mqConsumerClass.method<&MQConsumer::__destruct>("__destruct");
-    
+
     mqConsumerClass.method<&MQConsumer::getConsumerId>("getConsumerId");
     mqConsumerClass.method<&MQConsumer::setConsumerId>("setConsumerId", {
         Php::ByVal("consumerId", Php::Type::String),
@@ -103,19 +103,19 @@ void registerMQConsumer(Php::Namespace &rocketMQNamespace) {
     mqConsumerClass.method<&MQConsumer::setTopic>("setTopic", {
         Php::ByVal("topic", Php::Type::String),
     });
-    
+
     mqConsumerClass.method<&MQConsumer::getNameSrvAddr>("getNameSrvAddr");
     mqConsumerClass.method<&MQConsumer::setNameSrvAddr>("setNameSrvAddr", {
         Php::ByVal("nameSrvAddr", Php::Type::String),
     });
-    
+
     mqConsumerClass.method<&MQConsumer::auth>("auth", {
         Php::ByVal("accessKey", Php::Type::String),
         Php::ByVal("secretKey", Php::Type::String),
     });
 
     mqConsumerClass.method<&MQConsumer::registerCallback>("registerCallback", {
-        Php::ByVal("ONSFactoryProperty::LogPath", Php::Type::Callable),
+        Php::ByVal("callbackFunc", Php::Type::Callable),
     });
 
     mqConsumerClass.method<&MQConsumer::subscribe>("subscribe", {
