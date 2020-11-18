@@ -86,13 +86,15 @@ void MQOrderProducer::start() {
     }
     if (this->pOrderProducer == nullptr) {
         try {
-            this->factoryInfo.setFactoryProperty("LogPath", Php::ini_get("aliyunmq.log_path"));
+            this->factoryInfo.setFactoryProperty(ONSFactoryProperty::LogPath, Php::ini_get("aliyunmq.log_path"));
 
             this->pOrderProducer = ONSFactory::getInstance()->createOrderProducer(this->factoryInfo);
+            if(this->pOrderProducer == nullptr) {
+                Php::error << "Initialization failed." << std::flush;
+            }
             this->pOrderProducer->start();
-        } catch (std::exception &exception) {
-            Php::out << "exception caught: " << exception.what() << std::endl;
-            throw Php::Exception(exception.what());
+        } catch (Php::Exception &exception) {
+            Php::error << "exception caught: " << exception.what() << std::flush;
         }
     }
 }
@@ -101,33 +103,33 @@ Php::Value MQOrderProducer::send(Php::Parameters &param) {
     // message
     std::string message = param[0];
 
-    // start send message
-    SendResultONS sendResultOns;
-    try {
-        Message msg(
-                this->factoryInfo.getPublishTopics(),
-                nullptr,
-                message.data()
-        );
-        if (this->getMessageKey()) {
-            msg.setKey(this->getMessageKey());
-        }
-        if (this->getMessageTag()) {
-            msg.setTag(this->getMessageTag());
-        }
-        if (this->deliverTime) {
-            msg.setStartDeliverTime((float)this->deliverTime);
-        }
-        if (this->shardingKey == "") {
-            throw Php::Exception("ShardingKey is empty(1).");
-        }
-        sendResultOns = this->pOrderProducer->send(msg, this->shardingKey);
-    } catch (ONSClientException &exception) {
-        this->messageKey = nullptr;
-        Php::out << "ErrorCode: " << exception.GetError() << " Exception:" << exception.GetMsg() << std::endl;
-        throw Php::Exception(exception.GetMsg());
+    Message msg(
+        this->factoryInfo.getPublishTopics(),
+        DEFAULT_TAG_NAME,
+        message.data()
+    );
+    if (this->getMessageKey()) {
+        msg.setKey(this->getMessageKey());
     }
-    return sendResultOns.getMessageId();
+    if (this->getMessageTag()) {
+        msg.setTag(this->getMessageTag());
+    }
+       
+    if (this->deliverTime) {
+        msg.setStartDeliverTime((float)this->deliverTime);
+    }
+    if (this->shardingKey == "") {
+        throw Php::Exception("ShardingKey is empty(1).");
+    }
+
+    // start send message
+    try {
+        SendResultONS sendResultOns = this->pOrderProducer->send(msg, this->shardingKey);
+        return sendResultOns.getMessageId();
+    } catch (ONSClientException exception) {
+        Php::error << "ErrorCode: " << exception.GetError() << "; Exception:" << exception.GetMsg() << std::flush;
+    }
+    return nullptr;
 }
 
 void MQOrderProducer::close() {

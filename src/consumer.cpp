@@ -41,7 +41,7 @@ void MQConsumer::auth(Php::Parameters &param) {
 void MQConsumer::registerCallback(Php::Parameters &param) {
     if (!param[0].isCallable())
         throw Php::Exception("Not a callable type.");
-    this->callbackFunc = param[0];
+    this->ONSFactoryProperty::LogPath = param[0];
 }
 
 void MQConsumer::subscribe(Php::Parameters &param) {
@@ -68,14 +68,13 @@ void MQConsumer::subscribe(Php::Parameters &param) {
             std::string tag(tags.data());
 
             MQMessageListener *mqMessageListener = new MQMessageListener();
-            mqMessageListener->registerCallback(this->callbackFunc);
+            mqMessageListener->registerCallback(this->ONSFactoryProperty::LogPath);
             this->cConsumer->subscribe(topic.c_str(), tag.c_str(), mqMessageListener);
             this->cConsumer->start();
 
             std::this_thread::sleep_for(std::chrono::milliseconds(waitTime * 1000));
-        } catch(ONSClientException &exception){
-            Php::out << "ErrorCode: " << exception.GetError() << " Exception:" << exception.GetMsg() << std::endl;
-            throw Php::Exception(exception.GetMsg());
+        } catch(ONSClientException exception){
+            Php::error << "ErrorCode: " << exception.GetError() << "; Exception:" << exception.GetMsg() << std::flush;
         }
     }
 }
@@ -116,7 +115,7 @@ void registerMQConsumer(Php::Namespace &rocketMQNamespace) {
     });
 
     mqConsumerClass.method<&MQConsumer::registerCallback>("registerCallback", {
-        Php::ByVal("callbackFunc", Php::Type::Callable),
+        Php::ByVal("ONSFactoryProperty::LogPath", Php::Type::Callable),
     });
 
     mqConsumerClass.method<&MQConsumer::subscribe>("subscribe", {

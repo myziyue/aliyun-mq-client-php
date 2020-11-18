@@ -12,6 +12,7 @@ Desktop.ini
  *.log
  *.bak
  *.swp
+.vscode
 
 # Prerequisites
 *.d
@@ -45,3 +46,5 @@ Desktop.ini
 *.exe
 *.out
 *.app
+
+aliyun-mq-linux-cpp-sdk/

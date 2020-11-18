@@ -11,10 +11,13 @@ try {
     $mqProducer->setNameSrvAddr($nameSrvAddr);
     $mqProducer->setTopic($topics);
     $mqProducer->auth($accessKey, $secretKey);
+
     $mqProducer->setShardingKey("test-abc");
+    $mqProducer->setMessageKey("testkey");
+    $mqProducer->setMessageTag("testtag");
+    
     $mqProducer->start();
     // 顺序分布
-//    var_dump($mqProducer->send("This is a demo", "test", "key"));
     var_dump($mqProducer->send("This is a demo"));
 } catch (Exception $ex) {
     echo $ex->getMessage();

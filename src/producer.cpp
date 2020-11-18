@@ -71,13 +71,12 @@ void MQProducer::auth(Php::Parameters &param) {
 void MQProducer::start() {
     if (this->pProducer == nullptr) {
         try {
-            this->factoryInfo.setFactoryProperty("LogPath", Php::ini_get("aliyunmq.log_path"));
+            this->factoryInfo.setFactoryProperty(ONSFactoryProperty::LogPath, Php::ini_get("aliyunmq.log_path"));
 
             this->pProducer = ONSFactory::getInstance()->createProducer(this->factoryInfo);
             this->pProducer->start();
-        } catch (std::exception &exception) {
-            Php::out << "exception caught: " << exception.what() << std::endl;
-            throw Php::Exception(exception.what());
+        } catch (Php::Exception &exception) {
+            Php::error << "exception caught: " << exception.what() << std::flush;
         }
     }
 }
@@ -86,57 +85,56 @@ Php::Value MQProducer::send(Php::Parameters &param) {
     // message
     std::string message = param[0];
 
-    // start send message
-    SendResultONS sendResultOns;
-
-    try {
-        Message msg(
-                this->factoryInfo.getPublishTopics(),
-                DEFAULT_TAG_NAME,
-                message.data()
-        );
-        if (this->getMessageKey()) {
-            msg.setKey(this->getMessageKey());
-        }
-        if (this->getMessageTag()) {
-            msg.setTag(this->getMessageTag());
-        }
-        if (this->deliverTime) {
-            msg.setStartDeliverTime((float)this->deliverTime);
-        }
-        sendResultOns = this->pProducer->send(msg);
-    } catch (ONSClientException &exception) {
-        this->messageKey = nullptr;
-        Php::out << "ErrorCode: " << exception.GetError() << " Exception:" << exception.GetMsg() << std::endl;
-        throw Php::Exception(exception.GetMsg());
+     Message msg(
+        this->factoryInfo.getPublishTopics(),
+        DEFAULT_TAG_NAME,
+        message.data()
+    );
+    if (this->getMessageKey()) {
+        msg.setKey(this->getMessageKey());
     }
-    return sendResultOns.getMessageId();
+    if (this->getMessageTag()) {
+        msg.setTag(this->getMessageTag());
+    }
+    if (this->deliverTime) {
+        msg.setStartDeliverTime((float)this->deliverTime);
+    }
+
+    // start send message
+    try {
+        SendResultONS sendResultOns = this->pProducer->send(msg);
+        return sendResultOns.getMessageId();
+    } catch (ONSClientException exception) {
+        Php::error << "ErrorCode: " << exception.GetError() << "; Exception:" << exception.GetMsg() << std::flush;
+    }
+    return nullptr;
 }
 
 Php::Value MQProducer::sendOneWay(Php::Parameters &param) {
     // message
     std::string message = param[0];
+
+    Message msg(
+        this->factoryInfo.getPublishTopics(),
+        DEFAULT_TAG_NAME,
+        message.data()
+    );
+    if (this->getMessageKey()) {
+        msg.setKey(this->getMessageKey());
+    }
+    if (this->getMessageTag()) {
+        msg.setTag(this->getMessageTag());
+    }
+    if (this->deliverTime) {
+        msg.setStartDeliverTime((float)this->deliverTime);
+    }
+
+
     // start send message
     try {
-        Message msg(
-                this->factoryInfo.getPublishTopics(),
-                DEFAULT_TAG_NAME,
-                message.data()
-        );
-        if (this->getMessageKey()) {
-            msg.setKey(this->getMessageKey());
-        }
-        if (this->getMessageTag()) {
-            msg.setTag(this->getMessageTag());
-        }
-        if (this->deliverTime) {
-            msg.setStartDeliverTime((float)this->deliverTime);
-        }
         this->pProducer->sendOneway(msg);
-    } catch (ONSClientException &exception) {
-        this->messageKey = nullptr;
-        Php::out << "ErrorCode: " << exception.GetError() << " Exception:" << exception.GetMsg() << std::endl;
-        throw Php::Exception(exception.GetMsg());
+    } catch (ONSClientException exception) {
+        Php::error << "ErrorCode: " << exception.GetError() << "; Exception:" << exception.GetMsg() << std::flush;
     }
     return true;
 }

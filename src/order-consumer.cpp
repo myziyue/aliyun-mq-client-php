@@ -61,7 +61,7 @@ void MQOrderConsumer::subscribe(Php::Parameters &param) {
     }
     if(this->cConsumer == nullptr) {
         try {
-            this->factoryInfo.setFactoryProperty("LogPath", Php::ini_get("aliyunmq.log_path"));
+            this->factoryInfo.setFactoryProperty(ONSFactoryProperty::LogPath, Php::ini_get("aliyunmq.log_path"));
 
             this->cConsumer = ONSFactory::getInstance()->createOrderConsumer(this->factoryInfo);
             std::string topic(this->factoryInfo.getPublishTopics());
@@ -73,9 +73,8 @@ void MQOrderConsumer::subscribe(Php::Parameters &param) {
             this->cConsumer->start();
 
             std::this_thread::sleep_for(std::chrono::milliseconds(waitTime * 1000));
-        } catch(ONSClientException &exception){
-            Php::out << "ErrorCode: " << exception.GetError() << " Exception:" << exception.GetMsg() << std::endl;
-            throw Php::Exception(exception.GetMsg());
+        } catch(ONSClientException exception){
+            Php::error << "ErrorCode: " << exception.GetError() << "; Exception:" << exception.GetMsg() << std::flush;
         }
     }
 }

@@ -13,8 +13,8 @@
 #include <thread>
 #include <mutex>
 
-#include "ONSFactory.h"
-#include "ONSClientException.h"
+#include "rocketmq/ONSFactory.h"
+#include "rocketmq/ONSClientException.h"
 
 #include "producer.h"
 #include "consumer.h"
@@ -23,8 +23,9 @@
 
 #define NAMESPACE_NAME "MyZiyue"
 #define DEFAULT_TAG_NAME "DefaultTag"
-#define DEFAULT_WAIT_TIME 60; // 单位：秒
+#define DEFAULT_WAIT_TIME 60 // 单位：秒
 
+using namespace std;
 using namespace ons;
 
 #endif //ROCKETMQ_ONCE_CLIENT_PHP_COMMON_H
